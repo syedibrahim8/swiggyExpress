@@ -50,7 +50,7 @@ const riderSchema = new mongoose.Schema({
     },
     role:{
         type:String,
-        default:"Delivery Agent"
+        default:"DeliveryAgent"
     },
     isActive:{
         type:Boolean,

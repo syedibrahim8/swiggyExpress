@@ -62,11 +62,8 @@ const restSchema = new mongoose.Schema({
     isOpen:{
         type:Boolean,
         default:false
-    },
-    role:{
-        type:String,
-        default:"Restaurant"
     }
+   
 },{
     timestamps:true,
     strict:false

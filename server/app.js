@@ -3,7 +3,10 @@ import dotenv from "dotenv";
 import "./utils/dbConnect.js";
 import userRouter from "./controllers/public/customer.js";
 import restaurantRouter from "./controllers/public/restaurant.js";
+import riderRouter from "./controllers/public/rider.js";
 import authMiddleware from "./middleware/auth.js";
+import restaurantPrivateRouter from "./controllers/private/restaurant.js"
+import userPrivateRouter from "./controllers/private/customer.js"
 dotenv.config();
 
 const port = process.env.PORT 
@@ -21,6 +24,9 @@ app.get("/",(req,res)=>{
 
 app.use("/user",userRouter)
 app.use("/restaurant",restaurantRouter)
+app.use("/rider",riderRouter)
 app.use(authMiddleware)
+app.use("/customerPrivate",userPrivateRouter)
+app.use("/restaurantPrivate",restaurantPrivateRouter)
 
 app.listen(port,()=>console.log(`Server is running at http://localhost:${port}`))

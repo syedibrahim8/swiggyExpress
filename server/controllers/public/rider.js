@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken"
 import mail from "../../utils/mailer.js";
 import sendSms from "../../utils/sms.js";
 import riderModel from "../../models/Rider/Rider.js";
@@ -32,17 +33,21 @@ router.post("/register", async (req, res) => {
       vehicle:{
         type:vehicleType,
         liscence,
-      }
+      },
+      verifyToken: {
+        emailToken: eToken,
+        phoneToken: pToken,
+      },
     };
     await riderModel.insertOne(dbPayload);
     await mail(
       email,
-      `Hello ${fullName}! Welcome to Swiggy Rider, deliver food and earn money`,
+      `Hello ${riderName}! Welcome to Swiggy Rider, deliver food and earn money`,
       `Your account is successfully registered with us please verify your email with given link ${eLink}`
     );
     await sendSms(
       phone,
-      `Welcome ${fullName}!\nPlease verify your mobile linked to swiggy account ${pLink}`
+      `Welcome ${riderName}!\nPlease verify your mobile linked to swiggy account ${pLink}`
     );
     res.status(201).json({
       msg: "Account created successfully, verify your email and phone to continue",
@@ -91,7 +96,7 @@ router.get("/verify-phone/:phoneToken", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
-    let user = await riderModel.findOne({$and:[{email},{role:"Customer"}]});
+    let user = await riderModel.findOne({$and:[{email},{role:"DeliveryAgent"}]});
     if (!user)
       return res
         .status(400)
@@ -125,7 +130,7 @@ router.post("/forgot-password",async (req,res)=>{
     if(!user){
         return res.status(400).json({msg:"User not found, Access denied!"})
     }
-    let tempPassword = Math.random().toString(36).split(1,10)
+    let tempPassword = Math.random().toString(36).slice(2,10)
     let otp = Math.floor(Math.random()*(99999-1000)+1000)
     let pass = await bcrypt.hash(tempPassword,10)
     await riderModel.updateOne({email},{$set:{password:pass,otp}},{new:true})
