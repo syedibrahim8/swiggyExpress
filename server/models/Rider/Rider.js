@@ -48,10 +48,6 @@ const riderSchema = new mongoose.Schema({
         minlength:[18,"Atleat 12"],
         maxlength:[40,"Max age 70"]
     },
-    role:{
-        type:String,
-        default:"DeliveryAgent"
-    },
     isActive:{
         type:Boolean,
         default:true

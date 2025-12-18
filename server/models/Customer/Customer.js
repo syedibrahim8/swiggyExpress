@@ -45,10 +45,6 @@ const customerSchema = new mongoose.Schema({
         type:Boolean,
         default:true
     },
-    role:{
-        type:String,
-        default:"Customer"
-    },
     isVerified:{
         email:{
             type:Boolean,

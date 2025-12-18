@@ -40,10 +40,10 @@ router.post("/register", async (req, res) => {
       `Welcome to Swiggy, Glad to have your Restaurant on board`,
       `Your account is successfully registered with us please verify your email with given link ${eLink}`
     );
-    await sendSms(
-      phone,
-      `Welcome ${restaurantName}!\nPlease verify your mobile linked to swiggy restaurant account ${pLink}`
-    );
+    // await sendSms(
+    //   phone,
+    //   `Welcome ${restaurantName}!\nPlease verify your mobile linked to swiggy restaurant account ${pLink}`
+    // );
     res.status(201).json({
       msg: "Restaurant account created successfully, verify your email and phone to continue",
     });
@@ -92,7 +92,7 @@ router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
 
-    let restaurant = await restaurantModel.findOne({$and:[{email},{role:"Restaurant"}]});
+    let restaurant = await restaurantModel.findOne({email});
     if (!restaurant)
       return res
         .status(400)
@@ -107,8 +107,7 @@ router.post("/login", async (req, res) => {
     if (!pass) return res.status(400).json({ msg: "Invalid Credentials" });
 
     let payload = {
-      id: restaurant._id,
-      role: restaurant.role
+      id: restaurant._id
     };
 
     const token = jwt.sign(payload, process.env.SEC_KEY, { expiresIn: "1d" });
@@ -123,7 +122,7 @@ router.post("/login", async (req, res) => {
 router.post("/forgot-password",async (req,res)=>{
   try {
     let {email} = req.body
-    let user = await restaurantModel.findOne({$and:[{email},{role:"Restaurant"}]})
+    let user = await restaurantModel.findOne({email})
     if(!user){
         return res.status(400).json({msg:"User not found"})
     }

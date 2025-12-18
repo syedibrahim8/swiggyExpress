@@ -29,16 +29,6 @@ const restSchema = new mongoose.Schema({
         unique:true,
         trim:true
     },
-    menu:[
-        {
-            itemName:{
-                type:String,
-            },
-            itemPrice:{
-                type:Number,
-            }
-        }
-    ],
     isVerified:{
         email:{
             type:Boolean,
@@ -62,8 +52,11 @@ const restSchema = new mongoose.Schema({
     isOpen:{
         type:Boolean,
         default:false
+    },
+    isActive:{
+        type:Boolean,
+        default:true
     }
-   
 },{
     timestamps:true,
     strict:false

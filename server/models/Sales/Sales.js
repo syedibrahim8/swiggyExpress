@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const salesSchema = new mongoose.Schema({
-  userID: {
+  userId: {
     type: String,
     require: true,
   },
-  RestaurantId: {
+  restaurantId: {
     type: String,
     require: true,
   },
@@ -28,13 +28,18 @@ const salesSchema = new mongoose.Schema({
       minlength: [1, "Quantity must be atleast 1"],
       maxlength: [15, "Maximum Quantity can be ordered is 15"],
     },
+    total:{
+      type:Number,
+      require:true
+    },
     paymentMethod:{
         type:String,
         enum:["cod","upi","card"]
     },
     orderStatus: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum:["finished","on-the-way"],
+      default:"on-the-way"
     },
   },
 },{

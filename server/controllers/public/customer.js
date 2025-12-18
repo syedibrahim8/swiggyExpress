@@ -92,8 +92,8 @@ router.get("/verify-phone/:phoneToken", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
-    let user = await customerModel.findOne({$and:[{email},{role:"Customer"}]});
-    if (!user)
+    let user = await customerModel.findOne({email});
+    if (!user || user.isActive == false)
       return res
         .status(400)
         .json({ msg: "User not found, Access denied" });
@@ -107,8 +107,7 @@ router.post("/login", async (req, res) => {
     if (!pass) return res.status(400).json({ msg: "Invalid Credentials" });
 
     let payload = {
-      id: user._id,
-      role: user.role
+      id: user._id
     };
 
     const token = jwt.sign(payload, process.env.SEC_KEY, { expiresIn: "1d" });
@@ -122,8 +121,8 @@ router.post("/login", async (req, res) => {
 router.post("/forgot-password",async (req,res)=>{
   try {
     let {email} = req.body
-    let user = await customerModel.findOne({$and:[{email},{role:"Customer"}]})
-    if(!user){
+    let user = await customerModel.findOne({email})
+    if(!user || user.isActive == false){
         return res.status(400).json({msg:"User not found, Access denied!"})
     }
     let tempPassword = Math.random().toString(36).slice(2,10)

@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "Syed Ibrahim Ali",
